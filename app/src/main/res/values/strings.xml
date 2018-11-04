@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VideoTags</string>
+    <string name="app_enter_youtube_video_link">Enter Youtube Video Link</string>
+    <string name="app_fetch_tags">Fetch Tags</string>
+    <string name="app_clear_button">Clear</string>
+    <string name="app_copy_all">Copy All</string>
+    <string name="app_tags">Tags</string>
+</resources>

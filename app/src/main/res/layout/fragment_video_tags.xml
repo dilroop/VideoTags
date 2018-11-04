@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.dsb.videotags.FetchVideoTagsBindingAdapters" />
+
+        <variable
+            name="viewModel"
+            type="com.dsb.videotags.FetchVideoTagsViewModel" />
+
+        <variable
+            name="clipboard"
+            type="android.content.ClipboardManager" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/app_enter_youtube_video_link"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:text="@={viewModel.link}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fetchTags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> viewModel.loadUrl(viewModel.link)}"
+                android:text="@string/app_fetch_tags"
+                app:enableOnLink="@{viewModel.link}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> viewModel.clearLink()}"
+                android:text="@string/app_clear_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fetchTags"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+                app:visibleIfText="@{viewModel.link}" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:alpha="0.1"
+                android:background="@color/colorPrimaryTextColor"
+                android:visibility="@{viewModel.tagsReady == true ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/fetchTags" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/app_tags"
+                android:textColor="@color/colorPrimaryTextColor"
+                android:visibility="@{viewModel.tagsReady == true ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tagsGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:scrollbars="vertical"
+                android:visibility="@{viewModel.tagsReady == true ? View.VISIBLE : View.GONE}"
+                app:clipboard="@{clipboard}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:tags="@{viewModel.tags}"
+                tools:background="#a3a3a3"
+                tools:layout_height="80dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/app_copy_all"
+                android:visibility="@{viewModel.tagsReady == true ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toStartOf="@+id/tagsGroup"
+                app:layout_constraintTop_toBottomOf="@+id/tagsGroup" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
